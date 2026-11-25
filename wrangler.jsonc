@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "brasa-burger",
+  "compatibility_date": "2026-11-01",
+  // Static site: Vite builds into dist/, served by Workers static assets.
+  // public/_headers (copied to dist/) sets caching and security headers.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
