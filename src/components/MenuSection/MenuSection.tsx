@@ -19,9 +19,9 @@ export function MenuSection() {
         </header>
 
         <ul role="list" className={styles.grid}>
-          {menu.items.map((item) => (
+          {menu.items.map((item, index) => (
             <li key={item.id} className={cx(styles.item, 'reveal')}>
-              <ProductCard item={item} />
+              <ProductCard item={item} index={index} />
             </li>
           ))}
         </ul>
