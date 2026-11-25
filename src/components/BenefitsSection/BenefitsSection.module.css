@@ -1,0 +1,90 @@
+.section {
+  padding-block: var(--space-section);
+  background: var(--color-creme);
+  color: var(--color-rubra);
+}
+
+.section :focus-visible {
+  outline-color: var(--color-rubra);
+}
+
+.title {
+  max-width: 12ch;
+  font-family: var(--font-display);
+  font-size: var(--display-md);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.list {
+  display: grid;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid var(--color-rubra-line);
+}
+
+.item {
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--color-rubra-line);
+}
+
+/* Small top-bun badge, echoing the mark. */
+.badge {
+  display: inline-grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3rem;
+  padding-top: 0.35rem;
+  border-radius: 1.75rem 1.75rem 0.5rem 0.5rem;
+  background: var(--color-rubra);
+  color: var(--color-creme);
+}
+
+.itemTitle {
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 2rem);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.itemText {
+  max-width: 30ch;
+  margin-top: 0.75rem;
+  color: var(--color-rubra-soft);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 40em) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .item {
+    padding: 2.5rem 2rem 2.5rem 0;
+  }
+
+  .item:nth-child(even) {
+    padding: 2.5rem 0 2.5rem 2rem;
+    border-left: 1px solid var(--color-rubra-line);
+  }
+}
+
+@media (min-width: 64em) {
+  .list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .item,
+  .item:nth-child(even) {
+    padding: 2.5rem 1.75rem 0;
+    border-bottom: 0;
+    border-left: 1px solid var(--color-rubra-line);
+  }
+
+  .item:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}

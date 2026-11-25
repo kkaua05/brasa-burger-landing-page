@@ -1,0 +1,99 @@
+.section {
+  padding-top: calc(var(--space-section) + 4rem);
+  padding-bottom: var(--space-section);
+  overflow-x: clip;
+}
+
+.panel {
+  position: relative;
+  display: grid;
+  padding: clamp(1.5rem, 5vw, 5.5rem);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+  background:
+    radial-gradient(60% 70% at 85% 30%, rgb(143 12 32 / 0.85), rgb(143 12 32 / 0) 70%),
+    var(--noise),
+    var(--color-brasa);
+}
+
+.visual {
+  position: relative;
+  width: min(100%, 26rem);
+  margin: calc(-1 * clamp(5rem, 22vw, 8rem)) auto 0.5rem;
+  pointer-events: none;
+}
+
+.burger {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 2rem 1.5rem rgb(26 0 3 / 0.55));
+  transform: rotate(8deg);
+}
+
+.copy {
+  position: relative;
+}
+
+.title {
+  max-width: 13ch;
+  font-family: var(--font-display);
+  font-size: var(--display-lg);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.description {
+  max-width: 32ch;
+  margin-top: 1.5rem;
+  color: var(--color-creme-soft);
+  font-size: var(--text-lg);
+}
+
+.action {
+  margin-top: 2.25rem;
+}
+
+@media (max-width: 39.99em) {
+  .action {
+    width: 100%;
+  }
+}
+
+@media (min-width: 64em) {
+  .panel {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    min-height: 34rem;
+  }
+
+  .copy {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  /* Breaks out of the panel's top edge. */
+  .visual {
+    position: absolute;
+    top: -16%;
+    right: -2%;
+    width: min(48%, 40rem);
+    margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .burger {
+      animation: spin-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+  }
+}
+
+@keyframes spin-in {
+  from {
+    transform: translateY(12%) rotate(-6deg) scale(0.9);
+  }
+}

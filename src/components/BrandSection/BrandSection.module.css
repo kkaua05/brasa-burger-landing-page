@@ -1,0 +1,93 @@
+.section {
+  padding-block: var(--space-section);
+  background: var(--noise), var(--color-brasa);
+}
+
+.layout {
+  display: grid;
+  grid-template-areas:
+    'title'
+    'figure'
+    'text';
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+.title {
+  grid-area: title;
+  max-width: 10ch;
+  font-family: var(--font-display);
+  font-size: var(--display-md);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.figure {
+  grid-area: figure;
+}
+
+/* Close-up of the melted cheddar inside the top-bun silhouette. */
+.frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 4.6;
+  border-radius: var(--radius-dome);
+  background: radial-gradient(80% 70% at 50% 60%, var(--color-glow), var(--color-rubra) 75%);
+}
+
+.image {
+  position: absolute;
+  top: -24%;
+  left: -26%;
+  width: 168%;
+  max-width: none;
+  height: auto;
+}
+
+.text {
+  grid-area: text;
+  display: grid;
+  gap: 1.1rem;
+  max-width: 38ch;
+  color: var(--color-creme-soft);
+  font-size: var(--text-lg);
+}
+
+.statement {
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-line-strong);
+  color: var(--color-creme);
+  font-family: var(--font-display);
+  font-size: var(--display-sm);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+@media (min-width: 48em) {
+  .figure {
+    width: 78%;
+  }
+}
+
+@media (min-width: 64em) {
+  .layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 1fr) minmax(0, 6fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'figure . title'
+      'figure . text';
+    column-gap: 0;
+    row-gap: clamp(2rem, 3vw, 3rem);
+    align-items: start;
+  }
+
+  .figure {
+    width: 100%;
+  }
+
+  .title {
+    align-self: end;
+  }
+}
