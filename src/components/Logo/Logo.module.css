@@ -1,0 +1,21 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.mark {
+  width: 1.45em;
+  height: 1.45em;
+  flex: none;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* Optical alignment of the cap height with the mark. */
+  padding-top: 0.06em;
+}
