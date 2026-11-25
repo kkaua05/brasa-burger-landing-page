@@ -23,7 +23,7 @@ export const siteConfig = {
       'Hambúrguer artesanal com pão de gergelim, carne grelhada, queijo e vegetais frescos. ' +
       `Conheça o cardápio da ${brandName} e faça seu pedido.`,
     /** URL absoluta de produção, ex.: "https://brasaburger.com.br". Usada no Open Graph e no canonical. */
-    siteUrl: '',
+    siteUrl: 'https://brasa-burger.kauafesilva05.workers.dev',
     locale: 'pt_BR',
   },
 

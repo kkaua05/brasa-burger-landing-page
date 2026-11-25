@@ -4,7 +4,7 @@
 
 **Landing page de hamburgueria artesanal com direção de arte editorial, produto como protagonista e engenharia de nível de produção.**
 
-[**Ver ao vivo →**](https://brasa-burger.pages.dev)
+[**Ver ao vivo →**](https://brasa-burger.kauafesilva05.workers.dev)
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white&labelColor=340006)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white&labelColor=340006)
@@ -12,7 +12,7 @@
 ![CSS Modules](https://img.shields.io/badge/CSS-Modules%20%C2%B7%20sem%20frameworks-FCE7D1?labelColor=340006)
 ![CLS](https://img.shields.io/badge/CLS-0-success?labelColor=340006)
 ![LCP](https://img.shields.io/badge/LCP%20mobile-2.1s-success?labelColor=340006)
-![Cloudflare Pages](https://img.shields.io/badge/deploy-Cloudflare%20Pages-F38020?logo=cloudflare&logoColor=white&labelColor=340006)
+![Cloudflare Pages](https://img.shields.io/badge/deploy-Cloudflare-F38020?logo=cloudflare&logoColor=white&labelColor=340006)
 
 <img src="docs/screenshots/hero-desktop.jpg" alt="Hero da Brasa Burger: título MORDA SEM PRESSA em creme sobre fundo bordô, com um hambúrguer de duas carnes ao centro e legendas apontando cada camada" width="100%" />
 
@@ -197,7 +197,7 @@ npm run dev
 
 ## Deploy
 
-Publicado no **Cloudflare Pages** como site estático (`npm run build` → `dist/`). O arquivo `public/_headers` aplica:
+Publicado na **Cloudflare** (Workers static assets, deploy contínuo a partir do GitHub) como site estático (`npm run build` → `dist/`). O arquivo `public/_headers` aplica:
 
 - `Cache-Control: immutable` de 1 ano para `/assets/*` e `/fonts/*`;
 - `Content-Security-Policy` restrita a `'self'`, HSTS, `X-Frame-Options: DENY`, `nosniff` e `Referrer-Policy`.
