@@ -43,7 +43,7 @@ export function Hero() {
 
           <p className={styles.description}>{description}</p>
 
-          <div className={styles.actions}>
+          <div className={styles.actions} data-hides-order-dock>
             <ButtonLink href={primaryAction.href} size="lg">
               {primaryAction.label}
             </ButtonLink>

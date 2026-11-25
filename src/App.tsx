@@ -7,6 +7,7 @@ import { Header } from './components/Header/Header.tsx'
 import { Hero } from './components/Hero/Hero.tsx'
 import { Marquee } from './components/Marquee/Marquee.tsx'
 import { MenuSection } from './components/MenuSection/MenuSection.tsx'
+import { OrderDock } from './components/OrderDock/OrderDock.tsx'
 
 export function App() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -26,6 +27,7 @@ export function App() {
         <CTASection />
       </main>
       <Footer inert={menuOpen} />
+      <OrderDock suspended={menuOpen} />
     </>
   )
 }

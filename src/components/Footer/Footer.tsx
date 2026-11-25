@@ -53,7 +53,7 @@ export function Footer({ inert }: { inert?: boolean }) {
   const year = useCurrentYear()
 
   return (
-    <footer id="contato" className={styles.footer} inert={inert}>
+    <footer id="contato" className={styles.footer} inert={inert} data-hides-order-dock>
       <div className={cx('container', styles.top)}>
         <div className={styles.brand}>
           <a href="#inicio" className={styles.logoLink} aria-label={`${brand.name}, voltar ao início`}>

@@ -101,6 +101,12 @@ export const ctaContent = {
   actionLabel: 'Quero pedir agora',
 }
 
+/** Barra fixa de pedido, só em celulares (onde o cabeçalho não tem o botão). */
+export const orderDockContent = {
+  prompt: 'Bateu a fome?',
+  actionLabel: 'Pedir agora',
+}
+
 export const footerContent = {
   tagline: 'Hambúrguer artesanal, camada por camada.',
   contactFallback: 'Canais de atendimento em breve.',

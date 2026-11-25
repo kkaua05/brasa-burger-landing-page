@@ -10,7 +10,7 @@ export function CTASection() {
   const order = orderLink()
 
   return (
-    <section id="pedido" className={styles.section} aria-labelledby="pedido-title">
+    <section id="pedido" className={styles.section} aria-labelledby="pedido-title" data-hides-order-dock>
       <div className="container">
         <div className={cx(styles.panel, 'reveal')}>
           <div className={styles.visual}>
