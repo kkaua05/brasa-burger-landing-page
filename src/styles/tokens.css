@@ -1,0 +1,56 @@
+:root {
+  /* Palette: everything derives from the two brand colours. */
+  --color-rubra: #65010d;
+  --color-brasa: #4d000a;
+  --color-ink: #340006;
+  --color-glow: #8f0c20;
+  --color-creme: #fce7d1;
+  --color-creme-soft: rgb(252 231 209 / 0.78);
+  --color-creme-muted: rgb(252 231 209 / 0.64);
+  --color-line: rgb(252 231 209 / 0.14);
+  --color-line-strong: rgb(252 231 209 / 0.34);
+  --color-rubra-soft: rgb(101 1 13 / 0.78);
+  --color-rubra-line: rgb(101 1 13 / 0.18);
+  --color-shadow: rgb(26 0 3 / 0.62);
+
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+
+  /* Type */
+  --font-display: 'Anton', Impact, 'Arial Narrow', sans-serif;
+  --font-body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.0625rem, 0.98rem + 0.36vw, 1.3125rem);
+  --display-sm: clamp(1.625rem, 1.3rem + 1.1vw, 2.375rem);
+  --display-md: clamp(2.75rem, 1.55rem + 4.6vw, 6rem);
+  --display-lg: clamp(3.25rem, 1.4rem + 7vw, 8.5rem);
+
+  /* Anton's accented capitals reach 1.14em above the baseline: this is the
+     tightest leading where Ã, Ú and Á clear the glyphs of the line above. */
+  --leading-display: 1.16;
+  --tracking-display: 0.005em;
+  --tracking-button: 0.08em;
+
+  /* Layout */
+  --content-max: 104rem;
+  --gutter: clamp(1rem, 0.35rem + 3.2vw, 3.5rem);
+  --space-section: clamp(5.5rem, 3.2rem + 8vw, 11rem);
+  --header-height: 4rem;
+
+  --radius-card: 1.75rem;
+  --radius-panel: clamp(1.75rem, 1rem + 2.4vw, 3rem);
+  --radius-pill: 999px;
+  /* Top-bun silhouette, the recurring frame of the identity. */
+  --radius-dome: 50% 50% var(--radius-card) var(--radius-card) / 38% 38% var(--radius-card) var(--radius-card);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@media (min-width: 64em) {
+  :root {
+    --header-height: 5rem;
+  }
+}
