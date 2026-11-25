@@ -1,0 +1,64 @@
+.marquee {
+  position: relative;
+  z-index: 1;
+  overflow-x: clip;
+  /* Room for the corners of the tilted band. */
+  padding-block: clamp(1.25rem, 3vw, 2.75rem);
+}
+
+.band {
+  width: 112%;
+  margin-left: -6%;
+  padding-block: clamp(0.75rem, 0.5rem + 1vw, 1.35rem);
+  background: var(--color-creme);
+  color: var(--color-rubra);
+  box-shadow: 0 1.5rem 3rem rgb(26 0 3 / 0.35);
+  rotate: -2deg;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+}
+
+.group {
+  display: flex;
+  flex: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1rem, 0.6rem + 1.6vw, 2.25rem);
+  padding-right: clamp(1rem, 0.6rem + 1.6vw, 2.25rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1rem + 2.2vw, 3rem);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.separator {
+  flex: none;
+  width: 0.62em;
+  height: 0.62em;
+  color: var(--color-glow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .track {
+      animation: slide linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+/* One copy of the list: the track always stays wider than the band. */
+@keyframes slide {
+  to {
+    transform: translateX(-25%);
+  }
+}

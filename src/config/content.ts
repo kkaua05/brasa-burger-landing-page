@@ -43,6 +43,11 @@ export const heroContent = {
   ],
 }
 
+/** Faixa entre a Hero e o cardápio: desliza com a rolagem da página. */
+export const marqueeContent = {
+  items: ['Pão com gergelim', 'Carne grelhada', 'Queijo derretido', 'Vegetais frescos', 'Camada por camada'],
+}
+
 export const menuContent = {
   title: 'Feito para quem ama hambúrguer.',
   intro: 'Uma seleção curta, pensada para ser bem feita. Escolha o seu e peça em um toque.',

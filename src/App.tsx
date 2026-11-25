@@ -5,6 +5,7 @@ import { CTASection } from './components/CTASection/CTASection.tsx'
 import { Footer } from './components/Footer/Footer.tsx'
 import { Header } from './components/Header/Header.tsx'
 import { Hero } from './components/Hero/Hero.tsx'
+import { Marquee } from './components/Marquee/Marquee.tsx'
 import { MenuSection } from './components/MenuSection/MenuSection.tsx'
 
 export function App() {
@@ -18,6 +19,7 @@ export function App() {
       <Header menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
       <main id="conteudo" tabIndex={-1} inert={menuOpen}>
         <Hero />
+        <Marquee />
         <MenuSection />
         <BrandSection />
         <BenefitsSection />
