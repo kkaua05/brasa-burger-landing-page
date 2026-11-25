@@ -1,7 +1,13 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig, type Plugin } from 'vite'
+import { createHash } from 'node:crypto'
+import { basename, relative } from 'node:path'
+import { createServer, defineConfig, type Plugin } from 'vite'
 import { heroImageSizes, heroPhoto, srcSet } from './src/config/images.ts'
 import { siteConfig } from './src/config/site.ts'
+
+const root = import.meta.dirname
+const siteUrl = siteConfig.seo.siteUrl.replace(/\/$/, '')
+const buildDate = new Date()
 
 const escapeHtml = (value: string) =>
   value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -10,7 +16,7 @@ const escapeHtml = (value: string) =>
  * Restaurant structured data, emitted only when real business details exist.
  * Nothing is generated from placeholders.
  */
-function structuredData(siteUrl: string): string {
+function structuredData(): string {
   const { brand, seo, contact } = siteConfig
   if (!contact.address && !contact.whatsapp) return ''
 
@@ -33,9 +39,10 @@ function structuredData(siteUrl: string): string {
   return `<script type="application/ld+json">${json}</script>`
 }
 
-/** Injects brand, SEO and preload values from src/config into index.html. */
+/**
+ * Injects brand, SEO and preload values from src/config into index.html.
+ */
 function siteMetaPlugin(): Plugin {
-  const siteUrl = siteConfig.seo.siteUrl.replace(/\/$/, '')
   const text: Record<string, string> = {
     BRAND_NAME: siteConfig.brand.name,
     SEO_TITLE: siteConfig.seo.title,
@@ -48,7 +55,7 @@ function siteMetaPlugin(): Plugin {
   }
   const markup: Record<string, string> = {
     CANONICAL: siteUrl ? `<link rel="canonical" href="${escapeHtml(siteUrl)}/" />` : '',
-    STRUCTURED_DATA: structuredData(siteUrl),
+    STRUCTURED_DATA: structuredData(),
   }
 
   return {
@@ -65,6 +72,52 @@ function siteMetaPlugin(): Plugin {
   }
 }
 
+/**
+ * Static pre-rendering: renders <App /> to HTML at build time and places it
+ * in index.html, so content, headings and images arrive with the document
+ * instead of after the JavaScript runs. main.tsx then hydrates it.
+ */
+function prerenderPlugin(): Plugin {
+  return {
+    name: 'prerender',
+    apply: 'build',
+    async transformIndexHtml(html, ctx) {
+      if (ctx.path !== '/index.html') return html
+
+      const server = await createServer({
+        root,
+        logLevel: 'error',
+        appType: 'custom',
+        server: { middlewareMode: true, hmr: false, ws: false },
+      })
+      try {
+        const { render } = (await server.ssrLoadModule('/src/entry-server.tsx')) as { render: () => string }
+        const placeholder = '<div id="root"></div>'
+        if (!html.includes(placeholder)) throw new Error(`prerender: ${placeholder} not found in index.html`)
+        return html.replace(placeholder, `<div id="root">${render()}</div>`)
+      } finally {
+        await server.close()
+      }
+    },
+  }
+}
+
+/**
+ * CSS Modules class names derived from the file path and the class name only,
+ * so the pre-rendered markup and the client bundle always agree.
+ */
+function scopedName(local: string, filename: string): string {
+  const file = relative(root, filename.split('?')[0]).replaceAll('\\', '/')
+  const hash = createHash('sha256').update(`${file}:${local}`).digest('base64url').slice(0, 5)
+  return `${basename(file).split('.')[0]}_${local}_${hash}`
+}
+
 export default defineConfig({
-  plugins: [react(), siteMetaPlugin()],
+  plugins: [react(), siteMetaPlugin(), prerenderPlugin()],
+  css: {
+    modules: { generateScopedName: scopedName },
+  },
+  define: {
+    __BUILD_YEAR__: JSON.stringify(buildDate.getFullYear()),
+  },
 })

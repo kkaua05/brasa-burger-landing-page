@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react'
 import { footerContent } from '../../config/content.ts'
 import { siteConfig } from '../../config/site.ts'
 import { useFitText } from '../../hooks/useFitText.ts'
@@ -8,7 +9,18 @@ import { Logo } from '../Logo/Logo.tsx'
 import { Navigation } from '../Navigation/Navigation.tsx'
 import styles from './Footer.module.css'
 
-const currentYear = new Date().getFullYear()
+const noSubscription = () => () => {}
+
+/**
+ * Hydrates with the build year (identical in the pre-rendered HTML and on the
+ * client), then switches to the visitor's current year if it differs.
+ */
+const useCurrentYear = () =>
+  useSyncExternalStore(
+    noSubscription,
+    () => new Date().getFullYear(),
+    () => __BUILD_YEAR__,
+  )
 
 interface ContactItem {
   icon: IconName
@@ -38,6 +50,7 @@ export function Footer({ inert }: { inert?: boolean }) {
   const { brand, contact, credit } = siteConfig
   const contacts = contactItems()
   const wordmark = useFitText<HTMLSpanElement>()
+  const year = useCurrentYear()
 
   return (
     <footer id="contato" className={styles.footer} inert={inert}>
@@ -99,7 +112,7 @@ export function Footer({ inert }: { inert?: boolean }) {
       <div className={cx('container', styles.bottom)}>
         <div className={styles.legal}>
           <p>
-            © {currentYear} {brand.name}. Todos os direitos reservados.
+            © {year} {brand.name}. Todos os direitos reservados.
           </p>
           <p>{footerContent.imageNotice}</p>
         </div>
