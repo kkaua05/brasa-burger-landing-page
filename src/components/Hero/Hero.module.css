@@ -5,8 +5,19 @@
   isolation: isolate;
   padding-top: calc(var(--header-height) + clamp(1.25rem, 4svh, 3rem));
   padding-bottom: clamp(3rem, 8svh, 5rem);
+  overflow: hidden;
   overflow: clip;
   view-timeline: --hero block;
+}
+
+/* Browsers without small-viewport units (Safari < 15.4, Chrome < 108). */
+@supports not (height: 1svh) {
+  .hero {
+    --hero-size: clamp(4rem, min(1.1rem + 17vw, 19vh), 12rem);
+
+    padding-top: calc(var(--header-height) + clamp(1.25rem, 4vh, 3rem));
+    padding-bottom: clamp(3rem, 8vh, 5rem);
+  }
 }
 
 .layout {
@@ -183,8 +194,9 @@
   }
 }
 
-/* Two zones: copy on the left, burger overlapping from the right. */
-@media (min-width: 64em) {
+/* Two zones: copy on the left, burger overlapping from the right. Phones in
+   landscape use it too: stacked, the burger would fill several screens. */
+@media (min-width: 64em), (min-width: 40em) and (max-height: 32em) and (orientation: landscape) {
   .layout {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: clamp(1rem, 2vw, 2rem);
@@ -214,6 +226,21 @@
      there is no room for the leader-line version yet. */
   .anatomy {
     display: none;
+  }
+}
+
+/* Short landscape screens: headline and burger sized to the viewport height.
+   Literal values (no var) so the vh line is a real fallback for svh. */
+@media (min-width: 40em) and (max-width: 63.99em) and (max-height: 32em) and (orientation: landscape) {
+  .title {
+    font-size: clamp(2.75rem, 17vh, 5rem);
+    font-size: clamp(2.75rem, 17svh, 5rem);
+  }
+
+  .visual {
+    width: min(100%, (100vh - 6rem) * 0.96);
+    width: min(100%, (100svh - 6rem) * 0.96);
+    margin-inline: auto;
   }
 }
 
