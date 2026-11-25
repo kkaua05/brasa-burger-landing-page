@@ -42,7 +42,9 @@ O projeto cobre o ciclo inteiro de um produto real: direção de arte, tratament
 | **Tipografia que respeita o português** | A entrelinha dos títulos foi medida para que Ã, Ú e Á não colidam com a linha de cima. No título da Hero, só as linhas com acento ganham espaço extra, automaticamente. |
 | **Acessibilidade real** | Menu mobile como diálogo com foco preso, Esc, `inert` no fundo e retorno de foco; skip link; seção ativa com `aria-current`; um único `h1`; `alt` em todas as imagens; foco visível. |
 | **Performance mensurável** | CLS 0, LCP de 2,1 s em mobile com CPU 4× mais lenta e 4G lento. AVIF/WebP responsivos com `srcset`, preload da imagem principal gerado a partir da config, fontes auto-hospedadas. |
-| **Uma fonte de configuração** | Marca, contatos, cardápio, textos e fotos ficam em `src/config`. Um plugin do Vite injeta título, Open Graph, canonical, preload e JSON-LD no `index.html` a partir dela. |
+| **Pré-renderização estática** | O build renderiza a página inteira em HTML (`renderToString`) e o React apenas hidrata no navegador: conteúdo, títulos e imagens chegam com o documento, a página funciona sem JavaScript e buscadores leem tudo sem executar scripts. |
+| **Uma fonte de configuração** | Marca, contatos, cardápio, textos e fotos ficam em `src/config`. Um plugin do Vite injeta título, Open Graph, canonical, preload e JSON-LD no HTML e gera `robots.txt`, `sitemap.xml` e o web manifest a partir dela. |
+| **Pedido sempre à mão no celular** | Uma barra flutuante de pedido aparece só em telas pequenas e sai de cena quando os botões da Hero, a chamada para pedido ou o rodapé estão visíveis. |
 | **Zero dependências de UI** | Só React e React DOM em produção. Nada de bibliotecas de componentes, animação ou CSS utilitário. |
 
 ---
@@ -134,16 +136,19 @@ src/
 │   ├── content.ts          textos das seções e legendas da Hero
 │   └── images.ts           registro de fotos, srcset e sizes
 ├── components/             um diretório por componente, CSS Modules
-│   ├── Header · MobileMenu · Navigation
-│   ├── Hero · MenuSection · ProductCard
+│   ├── Header · MobileMenu · Navigation · OrderDock
+│   ├── Hero · Marquee · MenuSection · ProductCard
 │   ├── BrandSection · BenefitsSection · CTASection · Footer
 │   └── ButtonLink · Logo · Icon · ProductImage
-├── hooks/                  useScrolled · useActiveSection · useDialogBehavior · useFitText
+├── hooks/                  useScrolled · useActiveSection · useDialogBehavior · useFitText · useNoneInView
 ├── lib/                    links (pedido/WhatsApp/Instagram) · scroll · format · cx · cssVars
-└── styles/                 tokens.css (paleta, escala tipográfica, espaçamento) · base.css
+├── styles/                 tokens.css (paleta, escala tipográfica, espaçamento) · base.css · not-found.css
+├── entry-server.tsx        render usado na pré-renderização do build
+└── main.tsx                hidrata o HTML pré-renderizado (ou renderiza do zero em dev)
+404.html                    página 404 com a identidade da marca, sem JavaScript
 scripts/                    remove-background.py · build-images.py
-public/_headers             cache imutável para assets com hash + cabeçalhos de segurança (CSP, HSTS)
-vite.config.ts              plugin que injeta meta tags, preload e JSON-LD a partir de src/config
+public/_headers             cache imutável para assets com hash + cabeçalhos de segurança (CSP, HSTS, COOP)
+vite.config.ts              meta tags, preload, JSON-LD, robots/sitemap/manifest e pré-renderização
 ```
 
 **Decisões que valem destacar**
@@ -152,6 +157,9 @@ vite.config.ts              plugin que injeta meta tags, preload e JSON-LD a par
 - **JSON-LD honesto:** os dados estruturados de `Restaurant` só são gerados quando existe endereço ou WhatsApp configurado.
 - **Sem layout shift:** toda imagem tem `width`/`height` reais e o palco da Hero usa a proporção da foto via variável CSS.
 - **Overflow contido por seção:** elementos que vazam (produto rotacionado, brilhos) são recortados com `overflow-x: clip` na própria seção, sem depender do `body`.
+- **Hidratação sem divergência:** nada que dependa do navegador é lido durante o render; o ano do rodapé hidrata com o ano do build e troca para o ano atual só se for diferente (`useSyncExternalStore`).
+- **Card que se adapta a si mesmo:** o card do cardápio usa container query: vertical numa célula estreita, foto e texto lado a lado quando ocupa a linha inteira (sem card órfão no tablet).
+- **Movimento sob controle do usuário:** a faixa de ingredientes só se move com a rolagem (scroll-driven), nunca sozinha.
 
 ---
 
@@ -200,7 +208,9 @@ npm run dev
 Publicado na **Cloudflare** (Workers static assets, deploy contínuo a partir do GitHub) como site estático (`npm run build` → `dist/`). O arquivo `public/_headers` aplica:
 
 - `Cache-Control: immutable` de 1 ano para `/assets/*` e `/fonts/*`;
-- `Content-Security-Policy` restrita a `'self'`, HSTS, `X-Frame-Options: DENY`, `nosniff` e `Referrer-Policy`.
+- `Content-Security-Policy` restrita a `'self'`, HSTS, `Cross-Origin-Opener-Policy`, `X-Frame-Options: DENY`, `nosniff` e `Referrer-Policy`.
+
+Endereços inexistentes caem na `404.html` (via `not_found_handling` no `wrangler.jsonc`).
 
 ---
 
