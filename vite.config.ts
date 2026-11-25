@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { createHash } from 'node:crypto'
-import { basename, relative } from 'node:path'
+import { basename, relative, resolve } from 'node:path'
 import { createServer, defineConfig, type Plugin } from 'vite'
 import { heroImageSizes, heroPhoto, srcSet } from './src/config/images.ts'
 import { siteConfig } from './src/config/site.ts'
@@ -86,7 +86,7 @@ function siteFiles(): Record<string, { type: string; body: string }> {
 }
 
 /**
- * Injects brand, SEO and preload values from src/config into index.html
+ * Injects brand, SEO and preload values from src/config into the HTML pages
  * and emits robots.txt, sitemap.xml and site.webmanifest (also served in dev).
  */
 function siteMetaPlugin(): Plugin {
@@ -180,5 +180,13 @@ export default defineConfig({
   },
   define: {
     __BUILD_YEAR__: JSON.stringify(buildDate.getFullYear()),
+  },
+  build: {
+    rolldownOptions: {
+      input: {
+        index: resolve(root, 'index.html'),
+        notFound: resolve(root, '404.html'),
+      },
+    },
   },
 })
