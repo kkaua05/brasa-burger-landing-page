@@ -23,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Python bytecode from scripts/
+__pycache__/
+*.pyc
+
 # Stock photo originals and high-res cut-out masters (see README › Pipeline de imagem)
 design/
