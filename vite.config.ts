@@ -39,8 +39,55 @@ function structuredData(): string {
   return `<script type="application/ld+json">${json}</script>`
 }
 
+/** robots.txt, sitemap.xml and the web manifest, all derived from src/config. */
+function siteFiles(): Record<string, { type: string; body: string }> {
+  const { brand, seo } = siteConfig
+  const files: Record<string, { type: string; body: string }> = {
+    'site.webmanifest': {
+      type: 'application/manifest+json',
+      body: JSON.stringify(
+        {
+          name: seo.title,
+          short_name: brand.name,
+          description: seo.description,
+          lang: 'pt-BR',
+          start_url: '/',
+          display: 'minimal-ui',
+          theme_color: '#65010d',
+          background_color: '#65010d',
+          icons: [
+            { src: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
+            { src: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' },
+          ],
+        },
+        null,
+        2,
+      ),
+    },
+    'robots.txt': {
+      type: 'text/plain; charset=utf-8',
+      body: ['User-agent: *', 'Allow: /', ...(siteUrl ? ['', `Sitemap: ${siteUrl}/sitemap.xml`] : []), ''].join('\n'),
+    },
+  }
+
+  if (siteUrl) {
+    files['sitemap.xml'] = {
+      type: 'application/xml; charset=utf-8',
+      body: [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        `  <url><loc>${escapeHtml(siteUrl)}/</loc><lastmod>${buildDate.toISOString().slice(0, 10)}</lastmod></url>`,
+        '</urlset>',
+        '',
+      ].join('\n'),
+    }
+  }
+  return files
+}
+
 /**
- * Injects brand, SEO and preload values from src/config into index.html.
+ * Injects brand, SEO and preload values from src/config into index.html
+ * and emits robots.txt, sitemap.xml and site.webmanifest (also served in dev).
  */
 function siteMetaPlugin(): Plugin {
   const text: Record<string, string> = {
@@ -68,6 +115,20 @@ function siteMetaPlugin(): Plugin {
           if (key in text) return escapeHtml(text[key])
           return match
         }),
+    },
+    configureServer(server) {
+      const files = siteFiles()
+      server.middlewares.use((req, res, next) => {
+        const file = files[(req.url ?? '').slice(1)]
+        if (!file) return next()
+        res.setHeader('Content-Type', file.type)
+        res.end(file.body)
+      })
+    },
+    generateBundle() {
+      for (const [fileName, file] of Object.entries(siteFiles())) {
+        this.emitFile({ type: 'asset', fileName, source: file.body })
+      }
     },
   }
 }
